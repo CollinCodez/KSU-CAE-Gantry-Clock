@@ -34,3 +34,7 @@
 
 /// @brief Initialize the Time Manager
 void InitTime();
+
+
+/// @brief Update the time
+void UpdateTime();

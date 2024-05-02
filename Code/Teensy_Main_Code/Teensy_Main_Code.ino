@@ -17,6 +17,7 @@ void setup() {
 		Serial.begin(115200);
 	#endif
 
+	InitTime();				// Initialize the time manager
 
 	InitShiftRegSteppers();	// Initialize the shift register (display block rotation) steppers
 }

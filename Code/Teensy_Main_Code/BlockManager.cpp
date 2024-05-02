@@ -1,7 +1,5 @@
 // Code to manage the blocks
 
-#pragma once // Include this file only once
-
 #include <Arduino.h>
 
 #include "BlockManager.h"
