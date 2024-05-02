@@ -4,21 +4,30 @@
 #include <Arduino.h> // Include the Arduino library to use the Arduino functions
 #include <TimeAlarms.h> // Include the timealarms library to use the time alarms functions
 
-#include "TimeManager.h" // Include the time manager library to use the time manager functions
-#include "BlockManager.h" // Include the block manager library to use the block manager functions
-#include "Gantry.h" // Include the gantry library to use the gantry functions
-#include "ShiftRegSteppers.h" // Include the shift register steppers library. The shift register steppers are used for rotating the blocks
+#include "Config.h" 			// The config file to use the configuration variables
+#include "TimeManager.h" 		// The time manager library deals with getting the time and setting the internal RTC
+#include "BlockManager.h" 		// The block manager library deals with deciding which block to display and/or rotate and when to do so
+#include "Gantry.h" 			// The gantry library manages moving the gantry to the correct position to move blocks
+#include "ShiftRegSteppers.h" 	// The shift register steppers library manages the steppers that rotate the blocks, which are all controlled via shift registers
 
-// #include <Stepper.h>
-// #include <FlexIO_t4.h>
 
 
 void setup() {
+	#if (SERIAL_ENABLED)
+		Serial.begin(115200);
+	#endif
 
+
+	InitShiftRegSteppers();	// Initialize the shift register (display block rotation) steppers
 }
 
 
 
 void loop() {
 
+
+
+	// Move things as needed. These functions will only run on internally managed intervals.
+	MoveGantry();					// Move the Gantry.
+	MoveDisplaySteppers();			// Move the display steppers.
 }

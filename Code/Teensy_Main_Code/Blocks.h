@@ -36,6 +36,12 @@ typedef enum {
 
 
 
+// Enumerations for the steppers that will rotate the displayed blocks. This is the same as the BlockColumn enumeration
+typedef BlockColumn BlockStepper;
+#define NUM_BLOCK_STEPPERS NUM_COLUMNS // Number of steppers
+
+
+
 // Enumerations for the rows
 typedef enum {
 	DISPLAY_ROW,
