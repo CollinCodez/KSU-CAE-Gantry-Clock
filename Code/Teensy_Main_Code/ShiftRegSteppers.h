@@ -39,16 +39,13 @@
 //	Shared Functions for the Shift Register Steppers code
 //	*************************************************************************************************
 
-
-
-
-
-//	*************************************************************************************************
-//	Shared Functions for the Shift Register Steppers code
-//	*************************************************************************************************
-
 // Initialize the shift register steppers
 void InitShiftRegSteppers();
+
+
+/// Check if all the steppers are idle
+/// @return True if all the steppers are idle, false otherwise
+bool DisplaySteppersIdle();
 
 
 /// Move a stepper a given number of steps

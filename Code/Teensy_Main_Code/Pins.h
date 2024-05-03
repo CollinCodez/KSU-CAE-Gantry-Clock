@@ -77,6 +77,13 @@ typedef enum {
 
 
 // Electromagnets
+const uint8_t HOURS_SECOND_DIGIT_EMAG = 0; // Electromagnet for the Hours Second Digit Block         CHECK WHAT PINS THESE ARE
+const uint8_t MINS_SECOND_DIGIT_EMAG = 0; // Electromagnet for the Minutes Second Digit Block       CHECK WHAT PINS THESE ARE
+
+
+// Gantry Electromagnet Limit Switches
+const uint8_t HOURS_SECOND_DIGIT_GANTRY_LS = 0; // Limit Switch for the Hours Second Digit Block Electromagnet         CHECK WHAT PINS THESE ARE
+const uint8_t MINS_SECOND_DIGIT_GANTRY_LS = 0; // Limit Switch for the Minutes Second Digit Block Electromagnet       CHECK WHAT PINS THESE ARE
 
 
 // Time Mode Switch

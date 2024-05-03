@@ -14,7 +14,9 @@
 // The states of the Gantry
 typedef enum {
 	GANTRY_IDLE,
-	GANTRY_MOVING,
+	GANTRY_CALIBRATING,
+	GANTRY_SWAPPING_BLOCKS,
+	GANTRY_HOMING,
 	GANTRY_ERROR
 } GantryState;
 
@@ -33,23 +35,6 @@ typedef enum {
 	// GANTRY_BW_DOWN
 } GantryDirection;
 
-
-
-
-
-//	*************************************************************************************************
-//	Structs for the Gantry
-//	*************************************************************************************************
-
-// Struct to hold the information of the Gantry
-typedef struct {
-	GantryState state;	// The state of the Gantry
-	GantryDirection dir;	// The direction the Gantry is moving
-	uint8_t currentX;	// The current X position of the Gantry
-	uint8_t currentY;	// The current Y position of the Gantry
-	uint8_t targetX;	// The target X position of the Gantry
-	uint8_t targetY;	// The target Y position of the Gantry
-} GantryInfo;
 
 
 

@@ -41,6 +41,15 @@
 //	Shared Functions for the block management code
 //	*************************************************************************************************
 
+/// Initialize the blocks
+void InitBlocks(){
+
+}
 
 
 
+/// Verify that all the blocks are present.
+/// @return True if all the blocks are present, false otherwise.
+bool VerifyBlocks(){
+	
+}

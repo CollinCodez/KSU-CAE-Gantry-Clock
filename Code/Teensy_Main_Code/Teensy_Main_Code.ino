@@ -19,6 +19,8 @@ void setup() {
 
 	InitTime();				// Initialize the time manager
 
+	InitBlocks();			// Initialize the block manager
+
 	InitShiftRegSteppers();	// Initialize the shift register (display block rotation) steppers
 }
 

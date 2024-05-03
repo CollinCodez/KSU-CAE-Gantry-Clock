@@ -154,6 +154,19 @@ void InitShiftRegSteppers(){
 
 
 
+/// Check if all the steppers are idle
+/// @return True if all the steppers are idle, false otherwise
+bool DisplaySteppersIdle(){
+	for(uint8_t i = 0; i < NUM_BLOCK_STEPPERS; i++){
+		if(BlockSteppers[i].state != SR_Stepper_IDLE){
+			return false;
+		}
+	}
+	return true;
+}// End of DisplaySteppersIdle
+
+
+
 /// Move a stepper a given number of steps
 /// @param stepper The stepper to move
 /// @param steps The number of steps to move
