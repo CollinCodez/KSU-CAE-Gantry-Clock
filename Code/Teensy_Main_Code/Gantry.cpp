@@ -503,6 +503,16 @@ void InitGantry(){
 		stepperDrivers[i].enableDriver();
 	}
 
+	// Set up and turn off the electromagnets
+	pinMode(HOURS_SECOND_DIGIT_EMAG, OUTPUT);
+	pinMode(MINS_SECOND_DIGIT_EMAG, OUTPUT);
+
+	digitalWrite(HOURS_SECOND_DIGIT_EMAG, LOW);
+	digitalWrite(MINS_SECOND_DIGIT_EMAG, LOW);
+
+
+	// Set up the Gantry Limit Switches
+
 	// Set the Gantry to the Home Position              TODO
 }// End of InitGantry()
 
