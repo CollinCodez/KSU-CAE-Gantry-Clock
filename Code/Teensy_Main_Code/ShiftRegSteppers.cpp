@@ -22,7 +22,7 @@ typedef enum {
 
 // The current state of a display stepper
 typedef enum {
-	SR_Stepper_IDLE,
+	SR_STEPPER_IDLE,
 	SR_STEPPER_MOVING,
 	SR_STEPPER_HOMING
 } SRStepperState;
@@ -115,14 +115,30 @@ void clearSteppers(){
 
 
 
+// Clear a specific stepper
+void clearStepper(BlockStepper stepper){
+	BlockSteppers[stepper].state = SR_STEPPER_IDLE;
+	BlockSteppers[stepper].dir = SR_STEPPER_NO_DIR;
+	stepData = stepData & ~(0b1111 << (stepper * 4));
+}// End of clearStepper
+
+
+
 // Set the step pattern for a stepper
 void setNextStepData(BlockStepper stepper, Step currentStep, SRStepperDirection dir){
-	if(dir == SR_STEPPER_CW){
-		BlockSteppers[stepper].currentStep = (Step)((currentStep + 1) % NUM_STEP_PATTERNS);
-	}else if(dir == SR_STEPPER_CCW){
-		BlockSteppers[stepper].currentStep = (Step)((currentStep - 1) % NUM_STEP_PATTERNS);
+	switch(dir){
+		case SR_STEPPER_NO_DIR:
+			clearStepper(stepper);
+			return;
+		case SR_STEPPER_CW:
+			BlockSteppers[stepper].currentStep = (Step)((currentStep + 1) % NUM_STEP_PATTERNS);
+			break;
+		case SR_STEPPER_CCW:
+			BlockSteppers[stepper].currentStep = (Step)((currentStep - 1) % NUM_STEP_PATTERNS);
+			break;
 	}
-	stepData = stepData | (stepPatterns[BlockSteppers[stepper].currentStep] << (stepper * 4));
+	stepData = stepData & ~(0b1111 << (stepper * 4));		// Clear the current step's data
+	stepData = stepData | (stepPatterns[BlockSteppers[stepper].currentStep] << (stepper * 4));	// Set the new step's data
 }// End of setNextStepData
 
 
@@ -139,7 +155,7 @@ void InitShiftRegSteppers(){
 	pinMode(DisplayStepperLatchPin, OUTPUT);
 
 	for(uint8_t i = 0; i < NUM_BLOCK_STEPPERS; i++){// Initialize the Block Steppers
-		BlockSteppers[i].state = SR_Stepper_IDLE;
+		BlockSteppers[i].state = SR_STEPPER_IDLE;
 		BlockSteppers[i].dir = SR_STEPPER_NO_DIR;
 		BlockSteppers[i].currentStep = STEP_1;
 		BlockSteppers[i].currentPos = 0;
@@ -158,7 +174,7 @@ void InitShiftRegSteppers(){
 /// @return True if all the steppers are idle, false otherwise
 bool DisplaySteppersIdle(){
 	for(uint8_t i = 0; i < NUM_BLOCK_STEPPERS; i++){
-		if(BlockSteppers[i].state != SR_Stepper_IDLE){
+		if(BlockSteppers[i].state != SR_STEPPER_IDLE){
 			return false;
 		}
 	}
@@ -223,30 +239,31 @@ void MoveDisplaySteppers(){
 		for(uint8_t i = 0; i < NUM_BLOCK_STEPPERS; i++){
 			// Check the stepper's state
 			switch(BlockSteppers[i].state){
-				case SR_Stepper_IDLE:
+				case SR_STEPPER_IDLE:
 					// Do nothing / keep the stepper in the idle state
 
 					break;
 				case SR_STEPPER_MOVING:
 					// Verify that it should be moving, then move the stepper toward the target position
 					// If it is, set the state to idle
+					isMoving = true;
 					if(BlockSteppers[i].currentPos != BlockSteppers[i].targetPos){
 						setNextStepData((BlockStepper)i, BlockSteppers[i].currentStep, BlockSteppers[i].dir);
 						BlockSteppers[i].currentPos += (BlockSteppers[i].dir == SR_STEPPER_CW) ? 1 : -1;
-						isMoving = true;
 					}else{
-						BlockSteppers[i].state = SR_Stepper_IDLE;
+						// Set the stepper to idle and turn off the stepper
+						clearStepper((BlockStepper)i);
 					}
 					break;
 				case SR_STEPPER_HOMING:
 					// Move the stepper toward the home position until the limit switch is triggered, then set that as the home position
-					if(!digitalRead(BlockRotationLimitSwitchPins[i])){
+					isMoving = true;
+					if(digitalRead(BlockRotationLimitSwitchPins[i])){
 						setNextStepData((BlockStepper)i, BlockSteppers[i].currentStep, BlockSteppers[i].dir);
 						BlockSteppers[i].currentPos += (BlockSteppers[i].dir == SR_STEPPER_CW) ? 1 : -1;
-						isMoving = true;
 					}else{
-						BlockSteppers[i].state = SR_Stepper_IDLE;
-						BlockSteppers[i].currentPos = 0;
+						BlockSteppers[i].currentPos = 0; // Reset the home position to here
+						clearStepper((BlockStepper)i);
 					}
 					break;
 			}// End of switch
